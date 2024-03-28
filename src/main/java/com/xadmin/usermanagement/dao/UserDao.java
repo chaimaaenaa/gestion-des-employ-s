@@ -115,8 +115,32 @@ public class UserDao {
 	}
 
 	//update user:::::::::::::::::::::::::::
+    public boolean updateUser(User user) throws SQLException {
+		boolean rowUpdated;
+		try (Connection connection = getConnection();
+				PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL);) {
+			System.out.println("updated USer:"+statement);
+			statement.setString(1, user.getName());
+			statement.setString(2, user.getEmail());
+			statement.setString(3, user.getCountry());
+			statement.setInt(4, user.getId());
+
+			rowUpdated = statement.executeUpdate() > 0;
+		}
+		return rowUpdated;
+	}
 	
 	//delete user :::::::::::::::::::::::::::::::
+    public boolean deleteUser(int id) throws SQLException {
+		boolean rowDeleted;
+		try (Connection connection = getConnection();
+				PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
+			statement.setInt(1, id);
+			rowDeleted = statement.executeUpdate() > 0;
+		}
+		return rowDeleted;
+	}
+    
 	private void printSQLException(SQLException ex) {
 		for (Throwable e : ex) {
 			if(e instanceof SQLException) {
